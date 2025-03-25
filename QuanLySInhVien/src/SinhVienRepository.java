@@ -127,6 +127,25 @@ public class SinhVienRepository {
         }
     }
 
+    public void xoaHocPhan(String msv, String mamonhoc) {
+        String sqlDelete = "DELETE FROM hocphan WHERE msv = ? AND mamonhoc = ?";
+        try {
+            DBConnection db = DBConnection.getInstance();
+            Connection cn = db.getConnection();
+            PreparedStatement ps = cn.prepareStatement(sqlDelete);
+            ps.setString(1, msv);
+            ps.setString(2, mamonhoc);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Xoá học phần thành công");
+            } else {
+                System.out.println("Xoá học phần thất bại");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void capNhatSinhVien(String msv) {
         String sqlUpdate = "UPDATE sinhvien SET  soluonghocphan = ?, diemtrungbinh = ? WHERE msv = ?";
         try {
@@ -139,7 +158,11 @@ public class SinhVienRepository {
             for (HocPhan hp : listHocPhan) {
                 diemtrungbinh += hp.getDiem();
             }
-            diemtrungbinh /= soluonghocphan;
+            if (soluonghocphan == 0) {
+                diemtrungbinh = 0;
+            } else {
+                diemtrungbinh /= soluonghocphan;
+            }
             ps.setInt(1, soluonghocphan);
             ps.setDouble(2, diemtrungbinh);
             ps.setString(3, msv);

@@ -97,6 +97,7 @@ public class Main {
         double diemtrungbinh = 0;
         SinhVien sv = new SinhVien(msv, fullname, soluonghocphan, diemtrungbinh);
         sinhVienRepository.themSinhVien(sv);
+        listSinhVien = sinhVienRepository.layDanhSachSinhVien();
     }
 
 
@@ -148,6 +149,22 @@ public class Main {
         }
     }
 
+    public static void xoaHocPhanTheoMSV(){
+        System.out.printf("Nhap ma sinh vien: ");
+        String msv = sc.nextLine();
+        if (!binarySearch(listSinhVien, msv)){
+            System.out.println("Khong tim thay sinh vien co ma sinh vien la: " + msv);
+        } else {
+            for (HocPhan hp : sinhVienRepository.layDanhSachHocPhan(msv)){
+                System.out.println(hp);
+            }
+            System.out.printf("Nhap ma mon hoc: ");
+            String mamonhoc = sc.nextLine();
+            sinhVienRepository.xoaHocPhan(msv, mamonhoc);
+            sinhVienRepository.capNhatSinhVien(msv);
+        }
+    }
+
 
 
 
@@ -177,6 +194,12 @@ public class Main {
                                 "  Ho va ten: " + sv.getFullname() +
                                 "  Diem trung binh: " + sv.getDiemtrungbinh());
                     }
+                    break;
+                case 6:
+                    System.out.println("Sua hoc phan theo ma sinh vien");
+                    break;
+                case 7:
+                    xoaHocPhanTheoMSV();
                     break;
                 case 8:
                     xoaSinhVienTheoMSV();
